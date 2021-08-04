@@ -112,6 +112,7 @@ class Hand():
 
     def sort_by_value(self) -> None:
         """ Sort hand by value """
+        self.cards.sort(key=lambda c: c.suit)
         self.cards.sort(key=lambda c: c.value())
 
 
@@ -170,6 +171,7 @@ def main():
         hand.add_card(deck.deal())
 
     hand.sort_by_suit()
+    hand.sort_by_value()
 
 
     
