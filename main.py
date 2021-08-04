@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-import dataclasses
+import random
 
 SUPPORTED_RANKS = ["Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"]
 SUPPORTED_SUITS = {"Spades", "Hearts", "Diamonds", "Clubs"}
@@ -35,13 +35,33 @@ class Card:
 @dataclass(init=False)
 class Deck():
     """ Deck implementation"""
-    cards: list   
+    remaining_cards: list   
+    dealt_cards: list
 
     def __init__(self):
-        self.cards = [Card(rank, suit) for rank in SUPPORTED_RANKS for suit in SUPPORTED_SUITS]
+        self.remaining_cards = [Card(rank, suit) for rank in SUPPORTED_RANKS for suit in SUPPORTED_SUITS]
+        self.dealt_cards = []
+
+    def shuffle(self):
+        """ Shuffle deck """      
+        self.remaining_cards = [*self.remaining_cards, *self.dealt_cards]
+        self.dealt_cards = []
+        random.shuffle(self.remaining_cards)
+
+    def remaining(self) -> int:
+        """ Return remaining cards """
+        return len(self.remaining_cards)
+
+    def deal(self) -> Card:
+        """ Deal a card """
+        if self.remaining() == 0:
+            raise ValueError("No more cards in deck")
+        card = self.remaining_cards.pop()
+        self.dealt_cards.append(card)
+        return card
 
     def __str__(self) -> str:
-        return f"Deck of {len(self.cards)} cards :{[str(c) for c in self.cards]}" 
+        return f"Deck of {len(self.remaining_cards)} cards :{[str(c) for c in self.remaining_cards]}" 
         
         
 
@@ -50,8 +70,15 @@ class Deck():
 def main():
 
     deck = Deck()
+    assert deck.remaining() == 52
 
-    print(deck)
+    deck.deal()
+    assert deck.remaining() == 51
+    assert len(deck.dealt_cards) == 1
+
+    deck.shuffle()
+    assert deck.remaining() == 52
+
 
 if __name__ == "__main__":
     main()
