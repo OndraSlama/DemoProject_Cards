@@ -137,7 +137,7 @@ def main():
 
     try:
         for _ in range(len(SUPPORTED_SUITS) * len(SUPPORTED_RANKS) + 1):
-            deck.deck.deal()
+            deck.deal()
     except ValueError:
         print("Exception raised correctly")
     else:
