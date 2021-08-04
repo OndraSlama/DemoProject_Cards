@@ -1,3 +1,9 @@
+""" 
+Demo project implementing operations with deck of cards
+Author: Ondrej Slama
+Date: 04.08.2021
+"""
+
 from dataclasses import dataclass
 import random
 
@@ -108,17 +114,37 @@ class Hand():
 
 
 def main():
-    # Quick tests
+
+    #----------------------------- Basic tests -----------------------------
+    # Card test
+    card = Card("Ace", "Spades")
+    assert card.value() == 1
+    assert card.suit_as_String() == "Spades"
+    assert card.rank_as_string() == "Ace"
+    assert str(card) == "Ace of Spades"    
+    
+    # Deck tests
     deck = Deck()
     assert deck.remaining() == 52
 
     deck.deal()
     assert deck.remaining() == 51
     assert len(deck.dealt_cards) == 1
+    
 
     deck.shuffle()
     assert deck.remaining() == 52
 
+    try:
+        for _ in range(len(SUPPORTED_SUITS) * len(SUPPORTED_RANKS) + 1):
+            deck.deck.deal()
+    except ValueError:
+        print("Exception raised correctly")
+    else:
+        assert False, "Should have raised exception (no cards in deck)"
+
+    # Hand tests
+    deck.shuffle()
     hand = Hand()
     assert len(hand.cards) == 0
     
