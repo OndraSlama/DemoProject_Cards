@@ -32,7 +32,7 @@ class Card:
 
     def rank_as_string(self) -> str:
         """ Return rank as string """
-        return self.suit
+        return self.rank
 
     def __str__(self) -> str:
         return f"{self.rank} of {self.suit}"
