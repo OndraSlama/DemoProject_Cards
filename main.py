@@ -73,7 +73,7 @@ class Hand():
 
     def add_card(self, card: Card) -> None:
         """ Add a card to hand """
-        if len(self.cards) == SUPPORTED_SUITS * SUPPORTED_RANKS:
+        if len(self.cards) == len(SUPPORTED_SUITS) * len(SUPPORTED_RANKS):
             raise ValueError("Hand already has maximum number of cards")
 
         self.cards.append(card)
@@ -108,7 +108,7 @@ class Hand():
 
 
 def main():
-
+    # Quick tests
     deck = Deck()
     assert deck.remaining() == 52
 
@@ -118,6 +118,27 @@ def main():
 
     deck.shuffle()
     assert deck.remaining() == 52
+
+    hand = Hand()
+    assert len(hand.cards) == 0
+    
+    for _ in range(5):
+        hand.add_card(deck.deal())
+    assert len(hand.cards) == 5
+
+    hand.remove_card(hand.cards[0])
+    assert len(hand.cards) == 4
+
+    
+    deck.shuffle()
+
+    try:
+        for _ in range(len(SUPPORTED_SUITS) * len(SUPPORTED_RANKS)):
+            hand.add_card(deck.deal())
+    except ValueError:
+        print("Exception raised correctly")
+    else:
+        assert False, "Should have raised exception (too many cards in hand)"
 
 
 if __name__ == "__main__":
