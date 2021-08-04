@@ -100,7 +100,6 @@ class Hand():
     def sort_by_suit(self) -> None:
         """ Sort hand by suit """
         self.cards.sort(key=lambda c: c.suit)
-        self.sort_by_value()
 
         get_attr = operator.attrgetter('suit')
         grouped_cards = [list(g) for k, g in itertools.groupby(sorted(self.cards, key=get_attr), get_attr)]
