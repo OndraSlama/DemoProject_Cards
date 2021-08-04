@@ -20,11 +20,11 @@ class Card:
         """ Return rank as value """
         return SUPPORTED_RANKS.index(self.rank) + 1
 
-    def suitAsString(self) -> str:
+    def suit_as_String(self) -> str:
         """ Return suit as string """
         return self.suit
 
-    def rankAsString(self) -> str:
+    def rank_as_string(self) -> str:
         """ Return rank as string """
         return self.suit
 
@@ -42,7 +42,7 @@ class Deck():
         self.remaining_cards = [Card(rank, suit) for rank in SUPPORTED_RANKS for suit in SUPPORTED_SUITS]
         self.dealt_cards = []
 
-    def shuffle(self):
+    def shuffle(self) -> None:
         """ Shuffle deck """      
         self.remaining_cards = [*self.remaining_cards, *self.dealt_cards]
         self.dealt_cards = []
@@ -62,6 +62,46 @@ class Deck():
 
     def __str__(self) -> str:
         return f"Deck of {len(self.remaining_cards)} cards :{[str(c) for c in self.remaining_cards]}" 
+
+@dataclass
+class Hand():
+    """ Hand implementation """
+    cards: list
+
+    def __init__(self):
+        self.cards = []
+
+    def add_card(self, card: Card) -> None:
+        """ Add a card to hand """
+        if len(self.cards) == SUPPORTED_SUITS * SUPPORTED_RANKS:
+            raise ValueError("Hand already has maximum number of cards")
+
+        self.cards.append(card)
+
+    def remove_card(self, card: Card) -> None:
+        """ Remove a card from hand """
+        if len(self.cards) == 0:
+            raise ValueError("No cards in hand")
+
+        if card not in self.cards:
+            raise ValueError(f"Card {card} not in hand")
+
+        self.cards.remove(card)
+
+    def sort_by_suit(self) -> None:
+        """ Sort hand by suit """
+        self.cards.sort(key=lambda c: c.suit)
+        self.sort_by_value()
+
+    def sort_by_value(self) -> None:
+        """ Sort hand by value """
+        self.cards.sort(key=lambda c: c.value())
+
+
+
+    def __str__(self) -> str:
+        return f"Hand of {len(self.cards)} cards :{[str(c) for c in self.cards]}" 
+
         
         
 
