@@ -7,6 +7,9 @@ Date: 04.08.2021
 from dataclasses import dataclass
 import random
 
+import itertools
+import operator
+
 SUPPORTED_RANKS = ["Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"]
 SUPPORTED_SUITS = {"Spades", "Hearts", "Diamonds", "Clubs"}
 
@@ -99,6 +102,15 @@ class Hand():
         self.cards.sort(key=lambda c: c.suit)
         self.sort_by_value()
 
+        get_attr = operator.attrgetter('suit')
+        grouped_cards = [list(g) for k, g in itertools.groupby(sorted(self.cards, key=get_attr), get_attr)]
+
+        for group in grouped_cards:
+            group.sort(key=lambda c: c.value())
+
+        self.cards = [card for group in grouped_cards for card in group]
+
+
     def sort_by_value(self) -> None:
         """ Sort hand by value """
         self.cards.sort(key=lambda c: c.value())
@@ -154,6 +166,12 @@ def main():
 
     hand.remove_card(hand.cards[0])
     assert len(hand.cards) == 4
+
+    for _ in range(10):
+        hand.add_card(deck.deal())
+
+    hand.sort_by_suit()
+
 
     
     deck.shuffle()
